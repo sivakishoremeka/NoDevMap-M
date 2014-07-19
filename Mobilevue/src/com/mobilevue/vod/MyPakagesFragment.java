@@ -361,7 +361,7 @@ public class MyPakagesFragment extends Fragment {
 			}
 			getPlansFromServer();
 			break;
-		case R.id.action_logout:	
+		case R.id.action_logout:
 			(mActivity).logout();
 			break;
 		default:

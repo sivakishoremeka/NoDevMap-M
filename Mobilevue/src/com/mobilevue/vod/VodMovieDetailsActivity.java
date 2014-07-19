@@ -598,13 +598,17 @@ public class VodMovieDetailsActivity extends Activity {
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						Intent intent = new Intent(
-								VodMovieDetailsActivity.this,
-								DoBGTasksService.class);
-						intent.putExtra("CLIENTID", ((MyApplication) getApplicationContext()).getClientId());
-						intent.putExtra(DoBGTasksService.App_State_Req,
-								SetAppState.SET_INACTIVE.ordinal());
-						startService(intent);
+						if (MyApplication.isActive) {
+							Intent intent = new Intent(
+									VodMovieDetailsActivity.this,
+									DoBGTasksService.class);
+							intent.putExtra("CLIENTID",
+									((MyApplication) getApplicationContext())
+											.getClientId());
+							intent.putExtra(DoBGTasksService.App_State_Req,
+									SetAppState.SET_INACTIVE.ordinal());
+							startService(intent);
+						}
 						// Clear shared preferences..
 						((MyApplication) getApplicationContext()).clearAll();
 						// close all activities..

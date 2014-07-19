@@ -448,6 +448,7 @@ public class MyApplication extends Application {
 		setCurrency("");
 		setPayPalCheck(false);
 		setPayPalClientID("");
+		isActive = false;
 		getEditor().clear().commit();
 	}
 

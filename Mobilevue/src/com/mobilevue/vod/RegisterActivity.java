@@ -463,7 +463,7 @@ public class RegisterActivity extends Activity {
 			}
 			if (resObj.getStatusCode() == 200) {
 
-				MyApplication.isActive = true;
+				// MyApplication.isActive = true;
 				// gather client details..
 				// {"clientData":{"balanceAmount":1440,"currency":"INR","balanceCheck":false}",
 				// "paypalConfigData":{"name":"Is_Paypal","enabled":true,"value":"{\"clientId\" :AXND_hChmLdQyk_zr8fBoWc75_h2ixtuc6F6i9BOmIZOaSynNRSToc_2otSR,\"secretCode\" : \"EBUikxDpbaVroBsJV8StIpMpFQAUr5h-RkhFrJKscZJKU2zaSkgQK2KTbMSv\"}","id":17}}

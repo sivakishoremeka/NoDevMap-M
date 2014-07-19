@@ -507,12 +507,17 @@ public class ChannelsActivity extends Activity implements
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						Intent intent = new Intent(ChannelsActivity.this,
-								DoBGTasksService.class);
-						intent.putExtra(DoBGTasksService.App_State_Req,
-								SetAppState.SET_INACTIVE.ordinal());
-						intent.putExtra("CLIENTID", ((MyApplication) getApplicationContext()).getClientId());
-						startService(intent);
+
+						if (MyApplication.isActive) {
+							Intent intent = new Intent(ChannelsActivity.this,
+									DoBGTasksService.class);
+							intent.putExtra(DoBGTasksService.App_State_Req,
+									SetAppState.SET_INACTIVE.ordinal());
+							intent.putExtra("CLIENTID",
+									((MyApplication) getApplicationContext())
+											.getClientId());
+							startService(intent);
+						}
 						// Clear shared preferences..
 						((MyApplication) getApplicationContext()).clearAll();
 						// close all activities..

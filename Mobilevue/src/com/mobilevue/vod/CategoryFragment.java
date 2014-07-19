@@ -28,7 +28,7 @@ import com.mobilevue.retrofit.OBSClient;
 
 public class CategoryFragment extends Fragment {
 
-	//private static final String TAG = CategoryFragment.class.getName();
+	// private static final String TAG = CategoryFragment.class.getName();
 	private ProgressDialog mProgressDialog;
 	private SearchDetails searchDtls;
 	private SharedPreferences mPrefs;

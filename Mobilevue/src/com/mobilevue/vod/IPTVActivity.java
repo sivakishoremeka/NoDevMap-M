@@ -15,7 +15,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -58,7 +57,7 @@ public class IPTVActivity extends FragmentActivity {
 
 	/** This is live/Iptv activity */
 
-	//public static String TAG = IPTVActivity.class.getName();
+	// public static String TAG = IPTVActivity.class.getName();
 	public final static String CHANNEL_DESC = "Channel Desc";
 	public final static String CHANNEL_URL = "URL";
 	private SharedPreferences mPrefs;
@@ -247,7 +246,7 @@ public class IPTVActivity extends FragmentActivity {
 	@Override
 	protected void onStop() {
 		// Log.d(TAG, "onStop");
-			if (scheduleClient != null)
+		if (scheduleClient != null)
 			scheduleClient.doUnbindService();
 		super.onStop();
 	}
@@ -284,7 +283,8 @@ public class IPTVActivity extends FragmentActivity {
 			break;
 		case R.id.action_activate:
 			Intent intent = new Intent(this, DoBGTasksService.class);
-			intent.putExtra("CLIENTID", ((MyApplication) getApplicationContext()).getClientId());
+			intent.putExtra("CLIENTID",
+					((MyApplication) getApplicationContext()).getClientId());
 			intent.putExtra(DoBGTasksService.App_State_Req,
 					SetAppState.SET_ACTIVE.ordinal());
 			startService(intent);
@@ -297,7 +297,7 @@ public class IPTVActivity extends FragmentActivity {
 					IPTVActivity.this.getSupportFragmentManager());
 			mViewPager.setAdapter(mEpgPagerAdapter);
 			break;
-		case R.id.action_logout:	
+		case R.id.action_logout:
 			logout();
 			break;
 		default:
@@ -531,10 +531,10 @@ public class IPTVActivity extends FragmentActivity {
 			this.channelId = channelId;
 		}
 	}
-	
+
 	public void logout() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(
-				this, AlertDialog.THEME_HOLO_LIGHT);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this,
+				AlertDialog.THEME_HOLO_LIGHT);
 		builder.setIcon(R.drawable.ic_logo_confirm_dialog);
 		builder.setTitle("Confirmation");
 		builder.setMessage("Are you sure to Logout?");
@@ -549,24 +549,31 @@ public class IPTVActivity extends FragmentActivity {
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						Intent intent = new Intent(IPTVActivity.this,
-								DoBGTasksService.class);
-						intent.putExtra("CLIENTID", ((MyApplication) getApplicationContext()).getClientId());
-						intent.putExtra(DoBGTasksService.App_State_Req,
-								SetAppState.SET_INACTIVE.ordinal());
-						startService(intent);
-						//Clear shared preferences..
-						((MyApplication)getApplicationContext()).clearAll();
-					    //close all activities..
-						Intent Closeintent = new Intent(IPTVActivity.this, MainActivity.class);
+
+						if (MyApplication.isActive) {
+							Intent intent = new Intent(IPTVActivity.this,
+									DoBGTasksService.class);
+							intent.putExtra("CLIENTID",
+									((MyApplication) getApplicationContext())
+											.getClientId());
+							intent.putExtra(DoBGTasksService.App_State_Req,
+									SetAppState.SET_INACTIVE.ordinal());
+							startService(intent);
+						}
+						// Clear shared preferences..
+						((MyApplication) getApplicationContext()).clearAll();
+						// close all activities..
+						Intent Closeintent = new Intent(IPTVActivity.this,
+								MainActivity.class);
 						// set the new task and clear flags
-						Closeintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						Closeintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+								| Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						Closeintent.putExtra("LOGOUT", true);
 						startActivity(Closeintent);
 						finish();
 					}
 				});
 		dialog.show();
-		
+
 	}
 }

@@ -147,7 +147,7 @@ public class DoBGTasksService extends IntentService {
 		//stopSelf();
 	}
 
-	private void setAppState(int req,String clientid) {
+	private void setAppState(int req,String clientId) {
 
 		MyApplication appContext = ((MyApplication) getApplicationContext());
 		OBSClient mOBSClient = appContext.getOBSClient();
@@ -159,7 +159,7 @@ public class DoBGTasksService extends IntentService {
 		int status = -1;
 		try {
 			
-			result = mOBSClient.updateAppStatus(clientid, reqData);
+			result = mOBSClient.updateAppStatus(clientId, reqData);
 		} catch (Exception e) {
 			error = ((retrofit.RetrofitError) e);
 			status = error.getResponse().getStatus();

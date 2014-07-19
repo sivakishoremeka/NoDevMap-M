@@ -18,7 +18,7 @@ import com.mobilevue.vod.MyApplication.SetAppState;
 
 public class MyAccountActivity extends Activity {
 
-	//private static final String TAG = MyAccountActivity.class.getName();
+	// private static final String TAG = MyAccountActivity.class.getName();
 	ListView listView;
 	private static final String FRAG_TAG = "My Fragment";
 
@@ -62,7 +62,7 @@ public class MyAccountActivity extends Activity {
 		transaction.add(R.id.a_my_acc_frag_container, myPackageFrag, FRAG_TAG);
 		transaction.commit();
 	}
-	
+
 	public void btnSubmit_onClick(View v) {
 		Fragment frag = getFragmentManager().findFragmentByTag(FRAG_TAG);
 		if (frag instanceof MyPakagesFragment) {
@@ -79,10 +79,10 @@ public class MyAccountActivity extends Activity {
 		} else
 			super.onBackPressed();
 	}
-	
+
 	public void logout() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(
-				this, AlertDialog.THEME_HOLO_LIGHT);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this,
+				AlertDialog.THEME_HOLO_LIGHT);
 		builder.setIcon(R.drawable.ic_logo_confirm_dialog);
 		builder.setTitle("Confirmation");
 		builder.setMessage("Are you sure to Logout?");
@@ -97,25 +97,31 @@ public class MyAccountActivity extends Activity {
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						Intent intent = new Intent(MyAccountActivity.this,
-								DoBGTasksService.class);
-						intent.putExtra("CLIENTID", ((MyApplication) getApplicationContext()).getClientId());
-						intent.putExtra(DoBGTasksService.App_State_Req,
-								SetAppState.SET_INACTIVE.ordinal());
-						startService(intent);
-						//Clear shared preferences..
-						((MyApplication)getApplicationContext()).clearAll();
-					    //close all activities..
-						Intent Closeintent = new Intent(MyAccountActivity.this, MainActivity.class);
+						if (MyApplication.isActive) {
+							Intent intent = new Intent(MyAccountActivity.this,
+									DoBGTasksService.class);
+							intent.putExtra("CLIENTID",
+									((MyApplication) getApplicationContext())
+											.getClientId());
+							intent.putExtra(DoBGTasksService.App_State_Req,
+									SetAppState.SET_INACTIVE.ordinal());
+							startService(intent);
+						}
+						// Clear shared preferences..
+						((MyApplication) getApplicationContext()).clearAll();
+						// close all activities..
+						Intent Closeintent = new Intent(MyAccountActivity.this,
+								MainActivity.class);
 						// set the new task and clear flags
-						Closeintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						Closeintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+								| Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						Closeintent.putExtra("LOGOUT", true);
 						startActivity(Closeintent);
 						finish();
 					}
 				});
 		dialog.show();
-		
+
 	}
 
 }

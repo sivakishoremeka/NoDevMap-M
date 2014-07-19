@@ -16,21 +16,20 @@ public class NetworkCheckActivity extends Activity {
 		boolean isConnected = ((MyApplication) getApplicationContext())
 				.isNetworkAvailable();
 		if (isConnected) {
-			
-		    String ClientId = ((MyApplication)getApplicationContext()).getClientId();	
-		    Intent intent  = null;
-		    if(ClientId!=null && ClientId.length()!=0){
-		    	 intent = new Intent(getApplicationContext(),
-						MainActivity.class);
-				
-		    }else{
-			 intent = new Intent(getApplicationContext(),
-					RegisterActivity.class);
-		    }
-		    startActivity(intent);
+
+			String ClientId = ((MyApplication) getApplicationContext())
+					.getClientId();
+			Intent intent = null;
+			if (ClientId != null && ClientId.length() != 0) {
+				intent = new Intent(getApplicationContext(), MainActivity.class);
+
+			} else {
+				intent = new Intent(getApplicationContext(),
+						RegisterActivity.class);
+			}
+			startActivity(intent);
 			this.finish();
-		
-		
+
 		} else {
 			AlertDialog dialog = new AlertDialog.Builder(
 					NetworkCheckActivity.this, AlertDialog.THEME_HOLO_LIGHT)

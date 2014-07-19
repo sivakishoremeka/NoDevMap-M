@@ -41,7 +41,7 @@ public class VodActivity extends FragmentActivity
 // implements
 // SearchView.OnQueryTextListener
 {
-	//private static final String TAG = VodActivity.class.getName();
+	// private static final String TAG = VodActivity.class.getName();
 	public static int ITEMS;
 	private final static String CATEGORY = "CATEGORY";
 	MyFragmentPagerAdapter mAdapter;
@@ -125,7 +125,6 @@ public class VodActivity extends FragmentActivity
 		});
 	}
 
-	
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
@@ -147,8 +146,8 @@ public class VodActivity extends FragmentActivity
 		mPrefs = getSharedPreferences(mApplication.PREFS_FILE, 0);
 		String category = mPrefs.getString(CATEGORY, "");
 
-		//String deviceId = Settings.Secure.getString(getApplicationContext()
-		//		.getContentResolver(), Settings.Secure.ANDROID_ID);
+		// String deviceId = Settings.Secure.getString(getApplicationContext()
+		// .getContentResolver(), Settings.Secure.ANDROID_ID);
 
 		if (mProgressDialog != null) {
 			mProgressDialog.dismiss();
@@ -168,9 +167,8 @@ public class VodActivity extends FragmentActivity
 		});
 		mProgressDialog.show();
 
-		String androidId = Settings.Secure.getString(
-				getApplicationContext().getContentResolver(),
-				Settings.Secure.ANDROID_ID);
+		String androidId = Settings.Secure.getString(getApplicationContext()
+				.getContentResolver(), Settings.Secure.ANDROID_ID);
 		mOBSClient.getPageCountAndMediaDetails(category.equals("") ? "RELEASE"
 				: category, "0", androidId, getPageCountAndDetailsCallBack);
 	}
@@ -248,7 +246,7 @@ public class VodActivity extends FragmentActivity
 		case R.id.action_refresh:
 			setPageCountAndGetDetails();
 			break;
-		case R.id.action_logout:	
+		case R.id.action_logout:
 			logout();
 			break;
 		default:
@@ -256,10 +254,10 @@ public class VodActivity extends FragmentActivity
 		}
 		return true;
 	}
-	
+
 	public void logout() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(
-				this, AlertDialog.THEME_HOLO_LIGHT);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this,
+				AlertDialog.THEME_HOLO_LIGHT);
 		builder.setIcon(R.drawable.ic_logo_confirm_dialog);
 		builder.setTitle("Confirmation");
 		builder.setMessage("Are you sure to Logout?");
@@ -274,24 +272,30 @@ public class VodActivity extends FragmentActivity
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						Intent intent = new Intent(VodActivity.this,
-								DoBGTasksService.class);
-						intent.putExtra("CLIENTID", ((MyApplication) getApplicationContext()).getClientId());
-						intent.putExtra(DoBGTasksService.App_State_Req,
-								SetAppState.SET_INACTIVE.ordinal());
-						startService(intent);
-						//Clear shared preferences..
-						((MyApplication)getApplicationContext()).clearAll();
-					    //close all activities..
-						Intent Closeintent = new Intent(VodActivity.this, MainActivity.class);
+						if (MyApplication.isActive) {
+							Intent intent = new Intent(VodActivity.this,
+									DoBGTasksService.class);
+							intent.putExtra("CLIENTID",
+									((MyApplication) getApplicationContext())
+											.getClientId());
+							intent.putExtra(DoBGTasksService.App_State_Req,
+									SetAppState.SET_INACTIVE.ordinal());
+							startService(intent);
+						}
+						// Clear shared preferences..
+						((MyApplication) getApplicationContext()).clearAll();
+						// close all activities..
+						Intent Closeintent = new Intent(VodActivity.this,
+								MainActivity.class);
 						// set the new task and clear flags
-						Closeintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						Closeintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+								| Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						Closeintent.putExtra("LOGOUT", true);
 						startActivity(Closeintent);
 						finish();
 					}
 				});
 		dialog.show();
-		
+
 	}
 }
