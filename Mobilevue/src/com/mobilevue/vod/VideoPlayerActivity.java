@@ -37,6 +37,7 @@ public class VideoPlayerActivity extends Activity implements
 	private ProgressDialog mProgressDialog;
 	private boolean isLiveController;
 
+	public int MediaServerDiedCount = 0;
 	public boolean stopThread = true;
 	public int currentPosition = 0;
 	public int lastPosition = 0;
@@ -100,6 +101,7 @@ public class VideoPlayerActivity extends Activity implements
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
+		MediaServerDiedCount = 0;
 		player = new MediaPlayer();
 		player.reset();
 		mUri = Uri.parse(getIntent().getStringExtra("URL"));
@@ -389,12 +391,29 @@ public class VideoPlayerActivity extends Activity implements
 					Toast.LENGTH_LONG).show();
 		} else if (what == MediaPlayer.MEDIA_ERROR_SERVER_DIED) {
 			// threadHandler.sendMessage(msg);
+			MediaServerDiedCount++;
+			if (MediaServerDiedCount < 2) {
+				Toast.makeText(getApplicationContext(),
+						"Server or Network Error.Please wait Connecting...",
+						Toast.LENGTH_LONG).show();
 
-			Toast.makeText(getApplicationContext(),
-					"Server or Network Error.Please wait Connecting...",
-					Toast.LENGTH_LONG).show();
-
-			reinitializeplayer();
+				reinitializeplayer();
+			} else {
+				stopThread = true;
+				if (player != null) {
+					if (player.isPlaying()) {
+						player.stop();
+						player.release();
+						player = null;
+					}
+				}
+				threadHandler.removeMessages(1);
+				threadHandler.removeMessages(0);
+				Toast.makeText(getApplicationContext(),
+						"Server or Network Error.Please try again.",
+						Toast.LENGTH_LONG).show();
+				finish();
+			}
 		} else {
 			controller.mHandler
 					.removeMessages(VideoControllerView.SHOW_PROGRESS);
@@ -453,6 +472,7 @@ public class VideoPlayerActivity extends Activity implements
 			player.release();
 			player = null;
 		}
+		MediaServerDiedCount = 0;
 		player = new MediaPlayer();
 		player.reset();
 		String videoType = getIntent().getStringExtra("VIDEOTYPE");
@@ -528,9 +548,7 @@ public class VideoPlayerActivity extends Activity implements
 						e.printStackTrace();
 						System.out.println("interrupt exeption" + e);
 					}
-
 				}
-
 			}
 
 			catch (Exception e) {
